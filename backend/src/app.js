@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import connectToSocket from "./controllers/socketmanager.js";
  
-import userRoute from "./routes/usersroutes.js";
+import userRoute from "./routes/users.routes.js";
 
 const app = express();
 const server = createServer(app);
@@ -18,6 +18,9 @@ app.set("port",(process.env.port || 8000));
 app.use(cors());
 app.use(express.json({ limit: "100kb" }));
 app.use(express.urlencoded({limit:"100kb", extended: true }));
+
+app.use("/api/v1/users",userRoute);
+app.use("/api/v2/users",userRoute);
 
 const start = async () => {
     const connectionDB = await mongoose.connect("mongodb+srv://Himanshu:Bab212him@cluster0.dmxqpyl.mongodb.net/");
