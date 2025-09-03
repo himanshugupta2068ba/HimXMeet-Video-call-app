@@ -11,9 +11,16 @@ let timeOnline={};
 
 
 const  connectToSocket=(server)=>{
-    const io = new Server(server); //io stand for socket
+    const io = new Server(server,{
+        cors:{
+            origin:"*",              //not to do in production as it opens up to all origins
+            methods:["GET","POST"],
+            allowedHeaders:["*"],
+            credentials:true
+        }
+    }); //io stand for socket
 
-
+    
     io.on("connection",(socket)=>{
 
 

@@ -1,0 +1,52 @@
+.landingpageContainer{
+  width: 100vw;
+  height: 100vh;
+  background: url("/public/background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: rgba(222, 217, 217, 0.778);
+}
+.landingpageContainer nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline:1.8rem;
+  padding-block: 1.5rem;
+}
+.landingpageContainer nav h2{
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+.landingpageContainer nav .navlist {
+  display: flex;
+  gap: 3rem;
+  cursor: pointer;
+}
+.landingmainContainer {
+  display: flex;
+  justify-content: space-between;
+  padding-inline: 3rem;
+  height: 80vh;
+  align-items: center;
+}
+.landingmainContainer > div :nth-child(1) {
+  font-size: 3rem;
+}
+.getStartedBtn {
+  background: rgba(238, 166, 49, 0.899);
+  width: fit-content;
+  padding: 0.5rem;
+  margin-top: 1rem;
+  border-radius: 20px;
+}
+.getStartedBtn a{
+  text-decoration: none;
+  color: rgba(238, 238, 237, 0.723);
+  font-weight: 600;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.landingmainContainer > div :nth-child(2) img {
+  height: 70vh;
+  width: auto;
+}
