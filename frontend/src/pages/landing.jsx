@@ -23,7 +23,7 @@ export default function LandingPage(){
                 </h1>
                 <p style={{ fontSize: "1.5rem", color: "white" }}>Experience seamless communication like never before.</p>
                 <div role="button " className="getStartedBtn">
-                    <Link to={"/home"}><p style={{fontSize:"1.5rem"}}>Get Started</p></Link>
+                    <Link to={"/auth"}><p style={{fontSize:"1.5rem"}}>Get Started</p></Link>
                 </div>
                  </div>
             <div>
