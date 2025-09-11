@@ -4,7 +4,7 @@ import "@mui/material/TextField";
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import "../styles/video.css";
-import { connect } from "mongoose";
+import { io } from "socket.io-client";
 // import { connect } from "mongoose";
 // import { set } from "mongoose";
 const server_url = "http://localhost:8000";
@@ -98,16 +98,32 @@ else{
     console.error("Error stopping tracks.", err);
   }
 }
+useEffect(()=>{
+  if(video!==undefined || audio!==undefined){
+    getUserMedia();
+  }
+},[video,audio]);
+
+let gotMessageFromServer=(fromId,message)=>{
+
+}
+let connectToSocketServer=()=>{
+  socketRef.current=io.connect(server_url,{secure:false});
+  socketRef.current.on('signal',gotMessageFromServer);
+  socketRef.current.on('connect',()=>{
+    socketRef.current.emit("join-call",window.location.href)
+  })
+}
 let getMedia=()=>{
   setVideo(videoAvailable);
   setAudio(audioAvailable);
   connectToSocketServer();
 }
-useEffect(()=>{
-  if(video!==undefined || audio!==undefined){
-    getMedia();
-  }
-},[video,audio]);
+
+let connect=()=>{
+  setAskForUsername(false);
+  getMedia();
+}
     return (
         <div>
            {askForUsername === true?
@@ -117,7 +133,7 @@ useEffect(()=>{
             <TextField id="outlined-basic" label="Username" variant="outlined" value={username} onChange={(e) => setUsername(e.target.value)} />
               <Button variant="contained" onClick={connect} >Connect</Button>
               <div>
-                <video ref={localVideoRef} autoPlay muted className="local-video" ></video>
+                <video ref={localVideoRef} autoPlay muted className="local-video"></video>
               </div>
             </div> :
             <></>

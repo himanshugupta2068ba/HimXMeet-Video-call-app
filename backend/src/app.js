@@ -24,7 +24,7 @@ app.use("/api/v2/users",userRoute);
 
 const start = async () => {
     const connectionDB = await mongoose.connect("mongodb+srv://Himanshu:Bab212him@cluster0.dmxqpyl.mongodb.net/");
-    console.log("Database connection string:", connectionDB);
+    // console.log("Database connection string:", connectionDB);
     server.listen(app.get("port"), () => {
         console.log(`Server is running on port ${app.get("port")}`);
     });
