@@ -3,6 +3,7 @@
   width: 100vw;
   height: 100vh;
   background: url("/public/background.png");
+  /* background-color: linear-gradient(135deg, #c6531a,red, #e957479e); */
   background-repeat: no-repeat;
   background-size: cover;
   color: rgba(222, 217, 217, 0.778);
@@ -104,5 +105,125 @@
 
   .landingImage img {
     max-width: 180px;
+  }
+}
+/* Home Page Container */
+.home {
+  background: linear-gradient(135deg, #000000, #330909e1);
+  color: #faf8f7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.home .navBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 2rem;
+  padding-block: 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.home .navBar h2 {
+  font-size: 1.5rem;
+  font-Weight: 700;
+  color: #ff7043;
+  letter-spacing: 2px;
+}
+
+.home .navBar p {
+  margin-left: 0.5rem;
+  font-weight: 500;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.home .navBar p:hover {
+  color: #ec1515a8;
+  transition: 0.3s ease-in-out;
+}
+
+/* Meet Container */
+.meetContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-inline: 3rem;
+  gap: 8vw;
+}
+
+.leftPanel {
+  max-width: 50%;
+}
+
+.leftPanel h2 {
+  
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(90deg, rgb(227, 129, 129), #d5b2b2, #807e7ee1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  line-height: 1.4;
+}
+
+.leftPanel .MuiTextField-root {
+  background: #fff;
+  border-radius: 8px;
+}
+
+.leftPanel button {
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* Right Panel Image */
+.rightPanel img {
+  width: 30vw;
+  max-width: 420px;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+/* ✅ Responsive */
+@media (max-width: 1024px) {
+  .meetContainer {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .leftPanel h2 {
+    font-size: 1.8rem;
+  }
+
+  .rightPanel img {
+    width: 60%;
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .home .navBar {
+    flex-direction: column;
+    gap: 0.8rem;
+    text-align: center;
+  }
+
+  .meetContainer {
+    gap: 2rem;
+  }
+
+  .leftPanel h2 {
+    font-size: 1.4rem;
+  }
+
+  .rightPanel img {
+    width: 80%;
   }
 }

@@ -6,15 +6,17 @@ export default function LandingPage() {
   return (
     <div className="landingpageContainer">
         
-      {/* ✅ Navbar */}
+      {/* Navbar */}
       <nav className="navbar">
         <div className="navHeader">
           <h2 style={{ color: "#ff1900" }}>H i m X M e e t</h2>
         </div>
 
-        {/* ✅ Nav list (desktop + mobile responsive) */}
+        {/*  Nav list (desktop + mobile responsive) */}
         <div className="navlist">
-          <p>Join as Guest</p>
+          <p onClick={()=>{
+            window.location.href="/abx"
+          }}>Join as Guest</p>
           <a href="/auth" style={{ textDecoration: "none", color: "inherit" }}>
             Register
           </a>
@@ -26,7 +28,7 @@ export default function LandingPage() {
         </div>
       </nav>
 
-      {/* ✅ Main Landing Content */}
+      {/* Main Landing Content */}
       <div className="landingmainContainer">
         <div className="landingText">
           <h1>

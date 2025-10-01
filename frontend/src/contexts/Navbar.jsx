@@ -15,7 +15,7 @@ import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemText } fro
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 
-// ✅ Navbar Component
+// Navbar Component
 const Navbar = ({ setFormState }) => {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();

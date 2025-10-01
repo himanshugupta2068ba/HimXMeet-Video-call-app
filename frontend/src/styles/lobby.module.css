@@ -1,0 +1,66 @@
+.lobby {
+  display: flex;
+  height: 100vh; 
+  width: 100%;
+  background: linear-gradient(135deg, #1b1a1a, #6d2020, #ff0000); /* black-red gradient */
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.lobby-video {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.lobby-video video {
+  width: 90%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0px 4px 20px rgba(0,0,0,0.7);
+}
+
+.lobby-credentials {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent overlay */
+  border-radius: 12px;
+}
+
+.lobby-credentials h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #ffdddd;
+}
+
+.lobby-credentials .MuiTextField-root {
+  margin-bottom: 1.5rem; /* ✅ gap between input and button */
+  background: white;
+  border-radius: 6px;
+}
+
+/* ✅ make the label text white */
+.lobby-credentials .MuiInputLabel-root {
+  color: white !important;
+}
+
+.lobby-credentials .MuiOutlinedInput-root input {
+  color: rgb(250, 249, 249); /* keep text inside field black */
+}
+
+.lobby-credentials .MuiButton-root {
+  background-color: #d32f2f;
+  font-weight: bold;
+  padding: 0.8rem;
+  border-radius: 8px;
+  transition: 0.3s ease;
+}
+
+.lobby-credentials .MuiButton-root:hover {
+  background-color: #b71c1c;
+}
