@@ -2,7 +2,7 @@
 .landingpageContainer{
   width: 100vw;
   height: 100vh;
-  background: url("/public/background.png");
+  background: url("/background.png");
   /* background-color: linear-gradient(135deg, #c6531a,red, #e957479e); */
   background-repeat: no-repeat;
   background-size: cover;
