@@ -1,33 +1,72 @@
-import express from "express";
-import {createServer} from "node:http";
+// import express from "express";
+// import {createServer} from "node:http";
 
+// import { Server } from "socket.io";
+// import mongoose from "mongoose";
+
+// import cors from "cors";
+// import connectToSocket from "./controllers/socketmanager.js";
+ 
+// import userRoute from "./routes/users.routes.js";
+
+// const app = express();
+// const server = createServer(app);
+// const io = connectToSocket(server); //io stand for socket
+
+// app.set("port",(process.env.port || 8000));
+
+// app.use(cors());
+// app.use(express.json({ limit: "100kb" }));
+// app.use(express.urlencoded({limit:"100kb", extended: true }));
+
+// app.use("/api/v1/users",userRoute);
+// app.use("/api/v2/users",userRoute);
+
+// const start = async () => {
+//     const connectionDB = await mongoose.connect("mongodb+srv://Himanshu:Bab212him@cluster0.dmxqpyl.mongodb.net/");
+//     // console.log("Database connection string:", connectionDB);
+//     server.listen(app.get("port"), () => {
+//         console.log(`Server is running on port ${app.get("port")}`);
+//     });
+// }
+
+// start();
+import express from "express";
+import { createServer } from "node:http";
 import { Server } from "socket.io";
 import mongoose from "mongoose";
-
 import cors from "cors";
+
 import connectToSocket from "./controllers/socketmanager.js";
- 
 import userRoute from "./routes/users.routes.js";
 
 const app = express();
 const server = createServer(app);
-const io = connectToSocket(server); //io stand for socket
+const io = connectToSocket(server);
 
-app.set("port",(process.env.port || 8000));
+app.set("port", process.env.PORT || 8000);
 
-app.use(cors());
+// ✅ CORS: allow frontend
+app.use(cors({
+  origin: "https://himxmeet-video-call-app-frontend.onrender.com",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+app.options("*", cors()); // handles preflight
+
 app.use(express.json({ limit: "100kb" }));
-app.use(express.urlencoded({limit:"100kb", extended: true }));
+app.use(express.urlencoded({ limit: "100kb", extended: true }));
 
-app.use("/api/v1/users",userRoute);
-app.use("/api/v2/users",userRoute);
+// Routes
+app.use("/api/v1/users", userRoute);
+app.use("/api/v2/users", userRoute);
 
 const start = async () => {
-    const connectionDB = await mongoose.connect("mongodb+srv://Himanshu:Bab212him@cluster0.dmxqpyl.mongodb.net/");
-    // console.log("Database connection string:", connectionDB);
-    server.listen(app.get("port"), () => {
-        console.log(`Server is running on port ${app.get("port")}`);
-    });
-}
+  await mongoose.connect("mongodb+srv://Himanshu:Bab212him@cluster0.dmxqpyl.mongodb.net/");
+  server.listen(app.get("port"), () => {
+    console.log(`Server is running on port ${app.get("port")}`);
+  });
+};
 
 start();
