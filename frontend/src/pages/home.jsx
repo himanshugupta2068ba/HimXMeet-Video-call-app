@@ -1,59 +1,55 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import withAuth from '../utils/withAuth'
 import { useNavigate } from 'react-router-dom'
 import "../App.css";
-import { Button, IconButton, TextField } from '@mui/material';
-import RestoreIcon from '@mui/icons-material/Restore';
+import { Button, TextField } from '@mui/material';
 import { AuthContext } from '../contexts/AuthContext';
+import Navbar from '../contexts/Navbar.jsx';
 
 function HomeComponent() {
 
 
     let navigate = useNavigate();
     const [meetingCode, setMeetingCode] = useState("");
+    const [profile, setProfile] = useState(null);
+    const { getUserProfile } = useContext(AuthContext);
+
+    useEffect(() => {
+        const loadProfile = async () => {
+            try {
+                const profileData = await getUserProfile();
+                setProfile(profileData);
+            } catch {
+                setProfile(null);
+            }
+        };
+
+        loadProfile();
+    }, []);
 
 
-    const {addToUserHistory} = useContext(AuthContext);
     let handleJoinVideoCall = async () => {
-        await addToUserHistory(meetingCode)
-        navigate(`/${meetingCode}`)
+        const trimmedMeetingCode = meetingCode.trim();
+        if (!trimmedMeetingCode) {
+            return;
+        }
+
+        navigate(`/${trimmedMeetingCode}`)
     }
 
     return (
         <>
        <div className='home'>
-            <div className="navBar">
-
-                <div style={{ display: "flex", alignItems: "center" }}>
-
-                    <h2>H i m X M e e t</h2>
-                </div>
-
-                <div style={{ display: "flex", alignItems: "center" }}>
-                    <IconButton onClick={
-                        () => {
-                            navigate("/history")
-                        }
-                    }>
-                        <RestoreIcon />
-                    </IconButton>
-                    <p>History</p>
-
-                    <Button onClick={() => {
-                        localStorage.removeItem("token")
-                        navigate("/auth")
-                    }}>
-                        Logout
-                    </Button>
-                </div>
-
-
-            </div>
+            <Navbar />
 
 
             <div className="meetContainer">
                 <div className="leftPanel">
                     <div>
+                        <div className="profileSummary">
+                            <span>{profile?.name || localStorage.getItem("userName") || localStorage.getItem("guestName") || "Guest"}</span>
+                            <span style={{ color: "#d5d5d5" }}>@{profile?.username || localStorage.getItem("userUsername") || "guest"}</span>
+                        </div>
                         <h2>Your Meeting Room, Just One Click Away</h2>
 
                         <div style={{ display: 'flex', gap: "10px" }}>

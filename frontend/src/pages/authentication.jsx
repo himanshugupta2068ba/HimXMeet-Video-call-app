@@ -13,7 +13,7 @@ import { Snackbar, Paper } from '@mui/material';
 import { motion } from 'framer-motion';
 import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../contexts/Navbar.jsx';
 // 🎨 Theme
 const defaultTheme = createTheme({
@@ -29,6 +29,7 @@ const defaultTheme = createTheme({
 
 // ✅ Authentication Page
 export default function Authentication() {
+  const location = useLocation();
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [name, setName] = React.useState('');
@@ -38,6 +39,19 @@ export default function Authentication() {
   const [open, setOpen] = React.useState(false);
 
   const { handleRegister, handleLogin } = React.useContext(AuthContext);
+
+  React.useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const mode = params.get('mode');
+
+    if (mode === 'register') {
+      setFormState(1);
+    }
+
+    if (mode === 'login') {
+      setFormState(0);
+    }
+  }, [location.search]);
 
   let handleAuth = async () => {
     try {
@@ -66,6 +80,7 @@ export default function Authentication() {
         component="main"
         sx={{
           height: '100vh',
+          pt: { xs: 10, md: 12 },
           backgroundImage: 'url("/loginimage.jpg")',
           backgroundRepeat: 'no-repeat',
           backgroundSize: 'cover',

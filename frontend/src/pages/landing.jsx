@@ -1,28 +1,52 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../App.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+  const { handleGuestLogin } = useContext(AuthContext);
+  const isAuthenticated = Boolean(localStorage.getItem("token"));
+  const isGuest = localStorage.getItem("isGuest") === "true";
+  const profileName = isGuest
+    ? localStorage.getItem("guestName") || "Guest"
+    : localStorage.getItem("userName") || localStorage.getItem("userUsername") || "Profile";
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("isGuest");
+    localStorage.removeItem("guestName");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userUsername");
+    navigate("/auth?mode=login");
+  };
+
   return (
     <div className="landingpageContainer">
-        
-      {/* Navbar */}
       <nav className="navbar">
         <div className="navHeader">
-          <h2 style={{ color: "#ff1900" }}>H i m X M e e t</h2>
+          <button type="button" className="navAsButton" onClick={() => navigate('/')}>H i m X M e e t</button>
         </div>
 
-        {/* Nav list (desktop + mobile responsive) */}
         <div className="navlist">
-          <Link to="/abx" style={{ textDecoration: "none", color: "inherit" }}>
-            <p>Join as Guest</p>
-          </Link>
-          <Link to="/auth" style={{ textDecoration: "none", color: "inherit" }}>
-            Register
-          </Link>
-          <Link to="/auth" style={{ textDecoration: "none", color: "inherit" }}>
-            Login
-          </Link>
+          {isAuthenticated ? (
+            <>
+              <button type="button" className="navAsButton" onClick={() => navigate('/home')}>Home</button>
+              <button type="button" className="navAsButton" onClick={() => navigate('/profile')}>{profileName}</button>
+              <button type="button" className="navAsButton" onClick={() => navigate('/history')}>History</button>
+              <button type="button" className="navAsButton" onClick={handleLogout}>Logout</button>
+            </>
+          ) : (
+            <>
+              <button type="button" className="navAsButton" onClick={() => handleGuestLogin('Guest')}>Join as Guest</button>
+              <Link to="/auth?mode=register" style={{ textDecoration: "none", color: "inherit" }}>
+                Register
+              </Link>
+              <Link to="/auth?mode=login" style={{ textDecoration: "none", color: "inherit" }}>
+                Login
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 
@@ -36,7 +60,7 @@ export default function LandingPage() {
             Experience seamless communication like never before.
           </p>
           <div role="button" className="getStartedBtn">
-            <Link to="/auth">
+            <Link to="/auth?mode=login" style={{ textDecoration: "none", color: "inherit" }}>
               <p style={{ fontSize: "1.2rem" }}>Get Started</p>
             </Link>
           </div>
