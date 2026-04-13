@@ -4,21 +4,11 @@ let connections = {};
 let messages = {};
 let timeOnline = {};
 
-const allowedOrigins = (process.env.FRONTEND_URLS || "http://localhost:5173")
-    .split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean);
-
 const connectToSocket = (server) => {
     const io = new Server(server, {
         cors: {
-            origin: (origin, callback) => {
-                if (!origin || allowedOrigins.includes(origin)) {
-                    callback(null, true);
-                    return;
-                }
-                callback(new Error("Not allowed by Socket.IO CORS"));
-            },
+            // Reflect any requesting origin to allow all environments.
+            origin: true,
             methods: ["GET", "POST"],
             credentials: true
         }

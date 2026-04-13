@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
@@ -11,9 +12,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthContext } from '../contexts/AuthContext';
 import { Snackbar, Paper } from '@mui/material';
 import { motion } from 'framer-motion';
-import { AppBar, Toolbar, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Navbar from '../contexts/Navbar.jsx';
 // 🎨 Theme
 const defaultTheme = createTheme({
@@ -37,6 +36,7 @@ export default function Authentication() {
   const [message, setMessage] = React.useState('');
   const [formState, setFormState] = React.useState(0); // 0 = Login, 1 = Register
   const [open, setOpen] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const { handleRegister, handleLogin } = React.useContext(AuthContext);
 
@@ -54,12 +54,19 @@ export default function Authentication() {
   }, [location.search]);
 
   let handleAuth = async () => {
+    if (isSubmitting) {
+      return;
+    }
+
+    setError('');
+    setIsSubmitting(true);
+
     try {
       if (formState === 0) {
-        await handleLogin(username, password);
+        await handleLogin(username.trim(), password);
       }
       if (formState === 1) {
-        let result = await handleRegister(name, username, password);
+        let result = await handleRegister(name.trim(), username.trim(), password);
         setUsername('');
         setMessage(result);
         setOpen(true);
@@ -69,7 +76,16 @@ export default function Authentication() {
       }
     } catch (err) {
       let message = err.response?.data?.message || 'Something went wrong';
+
+      if (err.code === 'ECONNABORTED') {
+        message = 'Request is taking too long. Please try again in a moment.';
+      } else if (!err.response) {
+        message = 'Unable to reach server. Please check internet or try again.';
+      }
+
       setError(message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -156,6 +172,7 @@ export default function Authentication() {
                     label="Full Name"
                     value={name}
                     autoFocus
+                    disabled={isSubmitting}
                     onChange={(e) => setName(e.target.value)}
                     InputLabelProps={{
                       style: { color: '#f5f5f53f', fontWeight: '600' },
@@ -172,6 +189,7 @@ export default function Authentication() {
                   fullWidth
                   label="Username"
                   value={username}
+                  disabled={isSubmitting}
                   onChange={(e) => setUsername(e.target.value)}
                   InputLabelProps={{
                     style: { color: '#ec151572', fontWeight: '900' },
@@ -187,6 +205,7 @@ export default function Authentication() {
                   label="Password"
                   type="password"
                   value={password}
+                  disabled={isSubmitting}
                   onChange={(e) => setPassword(e.target.value)}
                   InputLabelProps={{
                     style: { color: '#ec151572', fontWeight: '600' },
@@ -195,11 +214,13 @@ export default function Authentication() {
                 />
 
                 {error && <p style={{ color: 'red' }}>{error}</p>}
+                {isSubmitting && <p style={{ color: '#ffe0d6' }}>Processing request...</p>}
 
                 <Button
                   type="button"
                   fullWidth
                   variant="contained"
+                  disabled={isSubmitting}
                   sx={{
                     mt: 3,
                     mb: 2,
@@ -213,12 +234,20 @@ export default function Authentication() {
                   }}
                   onClick={handleAuth}
                 >
-                  {formState === 0 ? 'Login' : 'Register'}
+                  {isSubmitting ? (
+                    <>
+                      <CircularProgress size={18} sx={{ color: '#fff', mr: 1 }} />
+                      {formState === 0 ? 'Logging in...' : 'Creating account...'}
+                    </>
+                  ) : (
+                    formState === 0 ? 'Login' : 'Register'
+                  )}
                 </Button>
 
                 <Grid container justifyContent="center">
                   <Grid item>
                     <Button
+                      disabled={isSubmitting}
                       onClick={() => setFormState(formState === 0 ? 1 : 0)}
                       sx={{
                         color: '#ff7043',

@@ -16,37 +16,30 @@ void io;
 
 app.set("port", process.env.PORT || 8000);
 
-const allowedOrigins = (process.env.FRONTEND_URLS || "http://localhost:5173")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
-
-const corsOrigin = (origin, callback) => {
-  // Allow server-to-server and health-check requests without Origin header.
-  if (!origin || allowedOrigins.includes(origin)) {
-    callback(null, true);
-    return;
-  }
-
-  callback(new Error("Not allowed by CORS"));
-};
-
 app.use(cors({
-  origin: corsOrigin,
+  // Reflect any requesting origin to allow all environments.
+  origin: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true
 }));
-app.options(/.*/, cors({ origin: corsOrigin, credentials: true }));
+app.options(/.*/, cors({ origin: true, credentials: true }));
 
 app.use(express.json({ limit: "100kb" }));
 app.use(express.urlencoded({ limit: "100kb", extended: true }));
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Backend is running"
+  });
+});
 
 app.use("/api/v1/users", userRoute);
 app.use("/api/v2/users", userRoute);
 
 const start = async () => {
-  const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/zoom";
+  const mongoUri = process.env.MONGODB_URI;
 
   try {
     await mongoose.connect(mongoUri);
